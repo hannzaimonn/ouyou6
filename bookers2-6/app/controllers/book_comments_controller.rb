@@ -1,0 +1,22 @@
+class BookCommentsController < ApplicationController
+
+  def create
+    @book = Book.find(params[:book_id])
+  	@book_comment = @book.book_comments.build(comment_params)
+    @book_comment.user_id =current_user.id
+    @book_comment.save
+    render :index
+  end
+
+
+  def destroy
+    @book_comment = BookComment.find(params[:id])
+  	@book_comment.destroy
+    render :index
+  end
+
+private
+  def comment_params
+    params.require(:book_comment).permit(:comment, :book_id, :user_id)
+  end
+end
